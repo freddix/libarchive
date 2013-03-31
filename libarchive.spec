@@ -1,13 +1,14 @@
 Summary:	Library to create and read several different archive formats
 Name:		libarchive
-Version:	2.6.0
-Release:	12
+Version:	3.1.2
+Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	https://github.com/downloads/libarchive/libarchive/%{name}-%{version}.tar.gz
-# Source0-md5:	e8ceea99a86b022e192a06d2b411a29b
+Source0:	http://www.libarchive.org/downloads/%{name}-%{version}.tar.gz
+# Source0-md5:	efad5a503f66329bb9d2f4308b5de98a
 Patch0:		%{name}-man_progname.patch
-URL:		http://libarchive.github.com/
+Patch1:		0001-mtree-fix-line-filename-length-calculation.patch
+URL:		http://www.libarchive.org/
 BuildRequires:	acl-devel
 BuildRequires:	attr-devel
 BuildRequires:	autoconf
@@ -32,21 +33,22 @@ Requires:	%{name} = %{version}-%{release}
 %description devel
 Header files for libarchive library.
 
-%package bsdtar
-Summary:	bsdtar - tar(1) implementation based on libarchive
+%package bsd-tools
+Summary:	BSD tools
 Group:		Applications/Archiving
 Requires:	%{name} = %{version}-%{release}
 
-%description bsdtar
-bsdtar - tar(1) implementation based on libarchive.
+%description bsd-tools
+BSD tools based on libarchive.
 
 %prep
 %setup -q
 %patch0 -p1
+%patch1 -p1
 
 %build
 %{__libtoolize}
-%{__aclocal}
+%{__aclocal} -I build/autoconf
 %{__autoconf}
 %{__autoheader}
 %{__automake}
@@ -67,7 +69,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %ghost %{_libdir}/libarchive.so.?
+%attr(755,root,root) %ghost %{_libdir}/libarchive.so.??
 %attr(755,root,root) %{_libdir}/libarchive.so.*.*.*
 
 %files devel
@@ -75,11 +77,14 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libarchive.so
 %{_libdir}/libarchive.la
 %{_includedir}/*.h
+%{_pkgconfigdir}/*.pc
 %{_mandir}/man3/*
 %{_mandir}/man5/*
 
-%files bsdtar
+%files bsd-tools
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/bsdtar
+%attr(755,root,root) %{_bindir}/bsdcpio
 %{_mandir}/man1/bsdtar.1*
+%{_mandir}/man1/bsdcpio.1*
 
