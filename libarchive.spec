@@ -1,7 +1,7 @@
 Summary:	Library to create and read several different archive formats
 Name:		libarchive
 Version:	3.1.2
-Release:	1
+Release:	2
 License:	BSD
 Group:		Libraries
 Source0:	http://www.libarchive.org/downloads/%{name}-%{version}.tar.gz
@@ -61,6 +61,8 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
+
 %clean
 rm -rf $RPM_BUILD_ROOT
 
@@ -75,7 +77,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libarchive.so
-%{_libdir}/libarchive.la
 %{_includedir}/*.h
 %{_pkgconfigdir}/*.pc
 %{_mandir}/man3/*
